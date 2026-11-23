@@ -1,37 +1,37 @@
 #!/usr/bin/env python3
-"""One-Line Roast: The Gadget You Use Every Day — one-line entry for make.fun.
+"""Roast the gadget I use every day, in one line.
 
-The entry is one original line: this program writes it to
-/output/entry.txt and nothing else.
+This entry is a single roast of my smartwatch, written out to
+/output/entry.txt for the make.fun judge to read.
 """
 
 from pathlib import Path
 
-MAX_CHARS = 200
-OUTPUT = Path("/output/entry.txt")
+LIMIT = 200
+TARGET = Path("/output/entry.txt")
 
-LINE = "My smartwatch just congratulated me for standing up, as if walking to the fridge were a summit attempt worthy of a medal ceremony."
+ROAST = "My smartwatch just congratulated me for standing up, as if walking to the fridge were a summit attempt worthy of a medal ceremony."
 
 
-def checked_line(text: str) -> str:
-    """Return the entry line, refusing anything the sealed scorer rejects.
+def make_entry(text):
+    """Check the roast fits the gate, then hand it back unchanged.
 
-    The gate wants UTF-8 text of 1 to 200 characters, not only white
-    space, on a single line — anything else scores 0 without a hearing.
+    The gate only accepts UTF-8 text of 1 to 200 characters on one
+    line, so anything outside that never reaches the judge.
     """
-    line = text.strip()
-    if not line:
-        raise ValueError("entry must not be blank")
-    if len(line) > MAX_CHARS:
-        raise ValueError(f"entry is {len(line)} chars, over the {MAX_CHARS} limit")
-    if any(ch in line for ch in "\r\n"):
-        raise ValueError("entry must be a single line")
-    return line
+    entry = text.strip()
+    if not entry:
+        raise SystemExit("roast must not be empty")
+    if len(entry) > LIMIT:
+        raise SystemExit(f"roast is {len(entry)} characters, limit is {LIMIT}")
+    if "\n" in entry or "\r" in entry:
+        raise SystemExit("roast must stay on one line")
+    return entry
 
 
-def main() -> None:
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(checked_line(LINE), encoding="utf-8")
+def main():
+    TARGET.parent.mkdir(parents=True, exist_ok=True)
+    TARGET.write_text(make_entry(ROAST), encoding="utf-8")
 
 
 if __name__ == "__main__":
